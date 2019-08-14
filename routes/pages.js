@@ -1,6 +1,8 @@
 const express=require("express");
 const bodyParser = require('body-parser');
 const router=express.Router();
+// controllers include 
+var userController=require('./../controllers/user-controller');
 
 // get into index page
 
@@ -13,5 +15,8 @@ router.get("/about",function(req,res){
 router.get("/registration",function(req,res){
 	res.render('registration', {page:'User Registration', menuId:'registration'});
 });
+
+
+router.post('/userregistration', userController.register);
 
 module.exports=router;

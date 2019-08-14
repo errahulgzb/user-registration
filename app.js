@@ -2,6 +2,7 @@ const express=require("express");
 const pageRouter=require("./routes/pages");
 // database connection file
 var connection = require('./config/config');
+
 const app=express();
 // for body parser
 app.use(express.urlencoded({extend:true}));
