@@ -10,5 +10,8 @@ router.get("/",function(req,res){
 router.get("/about",function(req,res){
 	res.render('aboutus', {page:'About Us', menuId:'aboutus'});
 });
+router.get("/registration",function(req,res){
+	res.render('registration', {page:'User Registration', menuId:'registration'});
+});
 
 module.exports=router;
