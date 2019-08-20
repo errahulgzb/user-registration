@@ -10,6 +10,13 @@
   
 
 
+  
+<% if(error){ %>
+    <% if(error.username){ %>
+    <p class="alert alert-danger"><%- error.username.msg %></p>
+  <% } %>
+  <% } %>
+
       <form action="/userregistration" method="POST">
 
     

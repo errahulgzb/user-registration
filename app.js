@@ -5,11 +5,13 @@ var connection = require('./config/config');
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
-var flash = require('connect-flash');
+var flash = require('req-flash');
+//var flash = require('connect-flash');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 const app=express();
 // for body parser
-app.use(express.urlencoded({extend:true}));
+
 
 // server static files
 app.use('/public',  express.static(__dirname + '/public'));
@@ -19,17 +21,21 @@ app.use('/public',  express.static(__dirname + '/public'));
 app.set("views",__dirname+"/views");
 app.set("view engine","ejs");
 
-// flash message function
-app.use(cookieParser('secret'));
-app.use(session({cookie: { maxAge: 60000 }}));
-app.use(flash());
+
+
+// app.use(cookieParser('secret'));
+// app.use(session({cookie: { maxAge: 60000 }}));
+//app.use(flash());
+//app.use(bodyParser.urlencoded({'extended': 'true'})); // parse application/x-www-form-urlencoded
+//app.use(bodyParser.json()); // parse application/json
+// controller function 
 app.use(bodyParser.urlencoded({'extended': 'true'})); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
-// controller function 
-
+app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 
 
 //   routes
+//app.use(expressValidator());
 app.use(pageRouter);
 
 
