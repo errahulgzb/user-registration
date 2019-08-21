@@ -21,3 +21,7 @@
 .active>a {
     color: #1abc9c !important;;
   }
+
+  .error {
+    color: #FF0004;
+}

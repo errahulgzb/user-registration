@@ -11,11 +11,8 @@
 
 
   
-<% if(error){ %>
-    <% if(error.username){ %>
-    <p class="alert alert-danger"><%- error.username.msg %></p>
-  <% } %>
-  <% } %>
+
+  
 
       <form action="/userregistration" method="POST">
 
@@ -25,7 +22,10 @@
       <!-- Username -->
       <label for="username">Username</label>
      
-        <input type="text" id="username" name="username" placeholder="Please enter username." class="form-control">
+        <input type="text" id="username" name="username" placeholder="Please enter username." value="<%= fulldata.username %>" class="form-control">
+        <% if ( error.hasOwnProperty('username') ) { %>
+        <span class="error"> <%= error.username.msg %> </span>
+        <% } %>
        
       </div>
     </div>
@@ -35,8 +35,10 @@
       <!-- E-mail -->
       <label for="email">E-mail</label>
      
-        <input type="text" id="email" name="email" placeholder="Please enter email Id." class="form-control">
-      
+        <input type="text" id="email" name="email" placeholder="Please enter email Id." value="<%= fulldata.email %>" class="form-control">
+       <% if ( error.hasOwnProperty('email') ) { %>
+        <span class="error"> <%= error.email.msg %> </span>
+        <% } %>
       </div>
     </div>
  
@@ -45,8 +47,10 @@
       <!-- Password-->
       <label for="password">Password</label>
       
-        <input type="password" id="password" name="password" placeholder="Please enter password." class="form-control">
-        
+        <input type="password" id="password" name="password" value="<%= fulldata.password %>" placeholder="Please enter password." class="form-control">
+         <% if ( error.hasOwnProperty('password') ) { %>
+        <span class="error"> <%= error.password.msg %> </span>
+        <% } %>
       </div>
     </div>
  
@@ -55,8 +59,10 @@
       <!-- Password -->
       <label for="password_confirm">Confirm Password</label>
       
-        <input type="password" id="password_confirm" name="password_confirm" placeholder="Please enter confirm password." class="form-control">
-       
+        <input type="password" id="password_confirm" name="password_confirm" value="<%= fulldata.password_confirm %>" placeholder="Please enter confirm password." class="form-control">
+        <% if ( error.hasOwnProperty('password_confirm') ) { %>
+        <span class="error"> <%= error.password_confirm.msg %> </span>
+        <% } %>
       </div>
     </div>
  <br/>
