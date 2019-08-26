@@ -11,26 +11,13 @@
 
 
   
-<!-- <% if(typeof regSuccessMsg != 'undefined' && regSuccessMsg!="") { %>
-<div class="alert alert-success"><%- regSuccessMsg %></div>
-<% }%> -->
+
   
 
       <form action="/userregistration" method="POST">
 
     
-    <div class="row">
-      <div class="col-sm-8">
-      <!-- Username -->
-      <label for="username">Username</label>
-     
-        <input type="text" id="username" name="username" placeholder="Please enter username." value="<%= fulldata.username %>" class="form-control">
-        <% if ( error.hasOwnProperty('username') ) { %>
-        <span class="error"> <%= error.username.msg %> </span>
-        <% } %>
-       
-      </div>
-    </div>
+    
  
    <div class="row">
       <div class="col-sm-8">
@@ -56,23 +43,13 @@
       </div>
     </div>
  
-    <div class="row">
-      <div class="col-sm-8">
-      <!-- Password -->
-      <label for="password_confirm">Confirm Password</label>
-      
-        <input type="password" id="password_confirm" name="password_confirm" value="<%= fulldata.password_confirm %>" placeholder="Please enter confirm password." class="form-control">
-        <% if ( error.hasOwnProperty('password_confirm') ) { %>
-        <span class="error"> <%= error.password_confirm.msg %> </span>
-        <% } %>
-      </div>
-    </div>
+   
  <br/>
     <div class="row">
       <div class="col-sm-8">
       <!-- Button -->
      
-        <button class="btn btn-success">Register</button>
+        <button class="btn btn-success">Login</button>
       </div>
     </div>
 

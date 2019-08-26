@@ -29,6 +29,7 @@ module.exports.register=function(req,res){
                 return res.redirect("userregistration");
                 }else{
                 //on success
+                req.flash('regSuccessMsg', 'Post deleted successfully!');
                 // req.flash("success_msg", "Registration successfully done.");
                 return res.redirect("userregistration");
                 }

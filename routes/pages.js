@@ -13,8 +13,13 @@ router.get("/",function(req,res){
 router.get("/about",function(req,res){
 	res.render('aboutus', {page:'About Us', menuId:'aboutus'});
 });
+
+router.get("/login",function(req,res){
+	res.render('login', {page:'Login', menuId:'login',fulldata:{},error: {}});
+});
+
 router.get("/userregistration",function(req,res){
-	res.render('registration', {error: {}, page:'User Registration', menuId:'registration',fulldata:{}});
+	res.render('registration', {error: {}, page:'User Registration', menuId:'registration',fulldata:{},regSuccessMsg: {}});
 });
 
 
