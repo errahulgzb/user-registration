@@ -21,7 +21,7 @@ router.get("/userregistration",function(req,res){
 router.post('/userregistration', 
 	// [
     check('username').not().isEmpty().withMessage('User Name field is required'),
-    check('email').not().isEmpty().withMessage('Email Id field is required'),
+    check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
     check('password').not().isEmpty().withMessage('Password field is required'),
     check('password_confirm').not().isEmpty().withMessage('Confirm Password field is required'),
     
@@ -31,9 +31,22 @@ router.post('/userregistration',
 	// 	if(!errors.isEmpty()){
 	// 		 res.render('registration', {fulldata:req.body,page:'User Registration', menuId:'registration', error: errors.mapped()});
 	// 	}else{
+
+		check('password_confirm').custom((value, { req }) => {
+      return new Promise((resolve, reject) => {
+      	var password=req.body.password;
+      	var password_confirm=req.body.password_confirm;
+      	if(password===password_confirm){
+      		return resolve();
+      	}else{
+      		 return reject();
+      	}
+       
+      });
+   }).withMessage('confirm password doesnot match to password.'),
 	  check('email').custom((value, { req }) => {
       return new Promise((resolve, reject) => {
-        userController.findRepByEmail({ 'email': value }, (err, rep) => {
+      	 userController.findRepByEmail({ 'email': value }, (err, rep) => {
         	if(rep[0].count>0) {
         		//console.log(rep[0].count);
                 return reject();
