@@ -39,15 +39,15 @@ module.exports.register=function(req,res){
 }
 
 
-module.exports.findRepByEmail=function(req,res){
-           var email=req.body.email;
-           console.log(email);
-             connection.query('SELECT id FROM users WHERE email = ?', email, function(err, rows) {
+module.exports.findRepByEmail=function(email,cb){
+            //console.log(email);
+           connection.query('SELECT count(id) as count FROM users WHERE email = ?', email.email, function(err, rows,fields) {
             if (err) {
-                return(err, null);
+                //console.log(err);
+                return cb(err, null);
             } else {
-              console.log(rows[0].id);
-                return(null, rows[0].id);
+              //console.log(rows);
+                return cb(null, rows);
                 }
         });
 }
