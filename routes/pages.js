@@ -19,23 +19,29 @@ router.get("/login",function(req,res){
 });
 
 router.post("/login",
-check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
-check('password').not().isEmpty().withMessage('Password field is required'),
- function(req,res){
-  const errors = validationResult(req);
+    check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
+    check('password').not().isEmpty().withMessage('Password field is required'),
+    function(req, res){
+    const errors = validationResult(req);
+    //console.log(errors);
     if(!errors.isEmpty()){
-      res.render("login",{page:'Login', menuId:'login',error: errors.mapped()});
+      //res.end();
+       res.render('login', {page:'Login', menuId:'login',error: errors.mapped(),successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
     }else{
       userController.login(req,res);
-    }
 
- } 
-
+    } 
+  }
 );
 
 
+router.get("/userregistration",function(req,res){
+	res.render('registration', {error: {}, page:'User Registration', menuId:'registration',fulldata:{},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
+});
+
+
 router.post('/userregistration', 
-    check('username').not().isEmpty().withMessage('User Name field is required'),
+	  check('username').not().isEmpty().withMessage('User Name field is required'),
     check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
     check('password').not().isEmpty().withMessage('Password field is required'),
     check('password_confirm').not().isEmpty().withMessage('Confirm Password field is required'),
@@ -76,6 +82,7 @@ router.post('/userregistration',
 
 		}	
 	}
+	
 );
 
 module.exports=router;
