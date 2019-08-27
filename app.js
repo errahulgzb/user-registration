@@ -5,8 +5,8 @@ var connection = require('./config/config');
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
-var flash = require('req-flash');
-//var flash = require('connect-flash');
+var flash = require('connect-flash');
+
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const app=express();
@@ -23,16 +23,16 @@ app.set("view engine","ejs");
 
 
 
-// app.use(cookieParser('secret'));
-// app.use(session({cookie: { maxAge: 60000 }}));
-//app.use(flash());
-//app.use(bodyParser.urlencoded({'extended': 'true'})); // parse application/x-www-form-urlencoded
-//app.use(bodyParser.json()); // parse application/json
+app.use(session({ cookie: { maxAge: 60000 }, 
+                  secret: 'woot',
+                  resave: false, 
+                  saveUninitialized: false}));
+app.use(flash());
+
 // controller function 
 app.use(bodyParser.urlencoded({'extended': 'true'})); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
-
 
 //   routes
 //app.use(expressValidator());

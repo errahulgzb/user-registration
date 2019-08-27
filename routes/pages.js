@@ -19,7 +19,7 @@ router.get("/login",function(req,res){
 });
 
 router.get("/userregistration",function(req,res){
-	res.render('registration', {error: {}, page:'User Registration', menuId:'registration',fulldata:{},regSuccessMsg: {}});
+	res.render('registration', {error: {}, page:'User Registration', menuId:'registration',fulldata:{},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
 

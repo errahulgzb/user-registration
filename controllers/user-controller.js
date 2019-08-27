@@ -24,13 +24,11 @@ module.exports.register=function(req,res){
 
                 connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
                 if (error) {
-
-                //req.flash("error_msg", "there are some error with query.");
-                return res.redirect("userregistration");
+                 req.flash('errorMsg', 'User Registration failed!.');
+                 return res.redirect("userregistration");
                 }else{
                 //on success
-                req.flash('regSuccessMsg', 'Post deleted successfully!');
-                // req.flash("success_msg", "Registration successfully done.");
+                req.flash('successMsg', 'User Registration successfully done!.');
                 return res.redirect("userregistration");
                 }
                 });
