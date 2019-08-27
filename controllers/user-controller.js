@@ -37,8 +37,10 @@ module.exports.register=function(req,res){
 
 
 // login controller function start from here
-module.exports.login=function(){
-        
+module.exports.login=function(req,res){
+        var email= req.body.email;
+        var password= cryptr.encrypt(req.body.password);
+        //connection.query("SELECT ")
 }
 // login controller function end from here
 
