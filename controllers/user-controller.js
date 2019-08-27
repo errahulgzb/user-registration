@@ -9,7 +9,7 @@ var connection = require('./../config/config');
 
 
 
-
+// user registration controller function start from here
 module.exports.register=function(req,res){
    
                 //code if no user with entered email was found
@@ -32,12 +32,19 @@ module.exports.register=function(req,res){
                 return res.redirect("userregistration");
                 }
                 });
-          
-
-   
 }
+// user registration controller function end from here
 
 
+// login controller function start from here
+module.exports.login=function(){
+        
+}
+// login controller function end from here
+
+
+
+// duplicate email id check from this function
 module.exports.findRepByEmail=function(email,cb){
             //console.log(email);
            connection.query('SELECT count(id) as count FROM users WHERE email = ?', email.email, function(err, rows,fields) {
@@ -50,7 +57,7 @@ module.exports.findRepByEmail=function(email,cb){
                 }
         });
 }
-
+// duplicate email id check from this function
 
 
 

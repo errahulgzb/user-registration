@@ -11,10 +11,15 @@
 
 
   
-
+<% if(typeof successMsg != 'undefined' && successMsg!="") { %>
+<div class="alert alert-success"><%- successMsg %></div>
+<% }%>
+<% if(typeof errorMsg != 'undefined' && errorMsg!="") { %>
+<div class="alert alert-danger"><%- errorMsg %></div>
+<% }%>
   
 
-      <form action="/userregistration" method="POST">
+      <form action="/login" method="POST">
 
     
     
@@ -24,7 +29,7 @@
       <!-- E-mail -->
       <label for="email">E-mail</label>
      
-        <input type="text" id="email" name="email" placeholder="Please enter email Id." value="<%= fulldata.email %>" class="form-control">
+        <input type="text" id="email" name="email" placeholder="Please enter email Id." class="form-control">
        <% if ( error.hasOwnProperty('email') ) { %>
         <span class="error"> <%= error.email.msg %> </span>
         <% } %>
@@ -36,7 +41,7 @@
       <!-- Password-->
       <label for="password">Password</label>
       
-        <input type="password" id="password" name="password" value="<%= fulldata.password %>" placeholder="Please enter password." class="form-control">
+        <input type="password" id="password" name="password" placeholder="Please enter password." class="form-control">
          <% if ( error.hasOwnProperty('password') ) { %>
         <span class="error"> <%= error.password.msg %> </span>
         <% } %>

@@ -15,29 +15,31 @@ router.get("/about",function(req,res){
 });
 
 router.get("/login",function(req,res){
-	res.render('login', {page:'Login', menuId:'login',fulldata:{},error: {}});
+	res.render('login', {page:'Login', menuId:'login',error: {},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
-router.get("/userregistration",function(req,res){
-	res.render('registration', {error: {}, page:'User Registration', menuId:'registration',fulldata:{},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
-});
+router.post("/login",
+check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
+check('password').not().isEmpty().withMessage('Password field is required'),
+ function(req,res){
+  const errors = validationResult(req);
+    if(!errors.isEmpty()){
+      res.render("login",{page:'Login', menuId:'login',error: errors.mapped()});
+    }else{
+      userController.login(req,res);
+    }
+
+ } 
+
+);
 
 
 router.post('/userregistration', 
-	// [
     check('username').not().isEmpty().withMessage('User Name field is required'),
     check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
     check('password').not().isEmpty().withMessage('Password field is required'),
     check('password_confirm').not().isEmpty().withMessage('Confirm Password field is required'),
-    
-	// ],
-	// function(req, res){
-	// 	const errors = validationResult(req);
-	// 	if(!errors.isEmpty()){
-	// 		 res.render('registration', {fulldata:req.body,page:'User Registration', menuId:'registration', error: errors.mapped()});
-	// 	}else{
-
-		check('password_confirm').custom((value, { req }) => {
+    check('password_confirm').custom((value, { req }) => {
       return new Promise((resolve, reject) => {
       	var password=req.body.password;
       	var password_confirm=req.body.password_confirm;
@@ -74,7 +76,6 @@ router.post('/userregistration',
 
 		}	
 	}
-	
 );
 
 module.exports=router;
