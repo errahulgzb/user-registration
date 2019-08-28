@@ -39,15 +39,16 @@ module.exports.register=function(req,res){
 // login controller function start from here
 module.exports.login=function(req,res){
         var email= req.body.email;
-        var password= cryptr.encrypt(req.body.password);
+        var password= req.body.password;
         connection.query("SELECT id,email,password FROM users WHERE email=?",[email],function(err, results, fields){
             if (err) {
                 req.flash('errorMsg', 'Some thing wrong with query!.');
                  return res.redirect("login");
             }else {
-
+                //console.log(cryptr.decrypt(results[0].password)+"database");
+                //console.log(password+"orignal");
                 if(results.length >0){
-                    if(results[0].password == password){
+                    if(cryptr.decrypt(results[0].password) == password){
                         console.log("logined");
                       res.end();  
                     }else{
