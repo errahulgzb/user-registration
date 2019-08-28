@@ -12,8 +12,14 @@
       <ul class="nav navbar-nav navbar-right">
         <li id="home"><a href="/">HOME</a></li>
         <li id="about"><a href="/about">ABOUT US</a></li>
-        <li id="registration"><a href="/userregistration">Registration</a></li>
-        <li id="registration"><a href="/login">Login</a></li>
+        <% if(sessionUser==1){%>
+         <li id="registration"><a href="/login">Profile</a></li>
+        <li id="registration"><a href="/login">logout</a></li>
+        <% }else{ %>
+           <li id="registration"><a href="/userregistration">Registration</a></li>
+          <li id="registration"><a href="/login">Login</a></li>
+        <% }%>
+       
         <li id="contact"><a href="/contact">CONTACT US</a></li>
       </ul>
     </div>

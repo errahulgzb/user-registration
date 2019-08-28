@@ -37,7 +37,21 @@ module.exports.register=function(req,res){
 
 
 // login controller function start from here
-module.exports.login=function(req,res){
+
+module.exports.findByEmail = function(username, cb){
+
+connection.query('SELECT * FROM users WHERE email = ?', username, function (error, results, fields) {
+if (error) console.log(error);
+
+// console.log(results);
+return cb(null, results);
+});
+};
+
+
+module.exports.loginbk=function(req,res){
+
+
         var email= req.body.email;
         var password= req.body.password;
         connection.query("SELECT id,email,password FROM users WHERE email=?",[email],function(err, results, fields){
@@ -45,12 +59,12 @@ module.exports.login=function(req,res){
                 req.flash('errorMsg', 'Some thing wrong with query!.');
                  return res.redirect("login");
             }else {
-                //console.log(cryptr.decrypt(results[0].password)+"database");
-                //console.log(password+"orignal");
-                if(results.length >0){
+               
+               if(results.length >0){
                     if(cryptr.decrypt(results[0].password) == password){
-                        console.log("logined");
-                      res.end();  
+                        req.session.email = email;
+                        req.session.user_id = results[0].id;
+                        return res.redirect("profile"); 
                     }else{
                       req.flash('errorMsg', 'Email Id and password doesnot match!.');
                       return res.redirect("login");  
@@ -63,6 +77,8 @@ module.exports.login=function(req,res){
 
             }
         })
+
+
 }
 // login controller function end from here
 
@@ -81,6 +97,20 @@ module.exports.findRepByEmail=function(email,cb){
                 }
         });
 }
+
+exports.findById = function(id, cb) {
+
+  connection.query('SELECT * FROM users WHERE id = ?', id, function (error, results, fields) {
+    
+    if (results) {
+      cb(null, results);
+    } else {
+      cb(new Error('User ' + id + ' does not exist'));
+    }
+  });
+
+}
+
 // duplicate email id check from this function
 
 

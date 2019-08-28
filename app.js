@@ -9,8 +9,12 @@ var flash = require('connect-flash');
 
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+// passport script
+var passport          = require('passport');
+var LocalStrategy     = require('passport-local').Strategy;
+// var BetterMemoryStore = require(__dirname + '/memory');
+// var store = new BetterMemoryStore({ expires: 60 * 60 * 1000, debug: true });
 const app=express();
-// for body parser
 
 
 // server static files
@@ -22,12 +26,15 @@ app.set("views",__dirname+"/views");
 app.set("view engine","ejs");
 
 
-
+// for flash message script
 app.use(session({ cookie: { maxAge: 60000 }, 
                   secret: 'woot',
-                  resave: false, 
+                  resave: true, 
                   saveUninitialized: false}));
 app.use(flash());
+// passport script
+app.use(passport.initialize());
+app.use(passport.session());
 
 // controller function 
 app.use(bodyParser.urlencoded({'extended': 'true'})); // parse application/x-www-form-urlencoded
@@ -35,7 +42,6 @@ app.use(bodyParser.json()); // parse application/json
 app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 
 //   routes
-//app.use(expressValidator());
 app.use(pageRouter);
 
 
