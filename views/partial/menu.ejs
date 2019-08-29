@@ -13,11 +13,11 @@
         <li id="home"><a href="/">HOME</a></li>
         <li id="about"><a href="/about">ABOUT US</a></li>
         <% if(sessionUser==1){%>
-         <li id="registration"><a href="/login">Profile</a></li>
-        <li id="registration"><a href="/login">logout</a></li>
+         <li id="profile"><a href="/profile">Profile</a></li>
+        <li id="logout"><a href="/logout">logout</a></li>
         <% }else{ %>
            <li id="registration"><a href="/userregistration">Registration</a></li>
-          <li id="registration"><a href="/login">Login</a></li>
+          <li id="login"><a href="/login">Login</a></li>
         <% }%>
        
         <li id="contact"><a href="/contact">CONTACT US</a></li>

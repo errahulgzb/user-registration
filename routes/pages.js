@@ -15,8 +15,6 @@ passport.use(new Strategy({usernameField:"email", passwordField:"password"},
   function(usernameField, passwordField, cb) {
    
     userController.findByEmail(usernameField, function(err, user) {
-      //console.log(user[0].password);
-      //console.log('Hello');
       if (err) { return cb(err); }
       if (!user) { return cb(null, false); }
       if (cryptr.decrypt(user[0].password) != passwordField) { return cb(null, false); }
@@ -42,11 +40,18 @@ passport.deserializeUser(function(uid, cb) {
 // get into index page
 
 router.get("/",function(req,res){
-  console.log(req.user);
-	res.render('index', {page:'Home', menuId:'home'});
+ var loggedin={};
+  if(req.user){
+    loggedin=1;
+  }
+	res.render('index', {sessionUser:loggedin,page:'Home', menuId:'home'});
 });
 router.get("/about",function(req,res){
-	res.render('aboutus', {page:'About Us', menuId:'aboutus'});
+  var loggedin={};
+  if(req.user){
+    loggedin=1;
+  }
+	res.render('aboutus', {sessionUser:loggedin,page:'About Us', menuId:'aboutus'});
 });
 
 router.get("/login",function(req,res){
@@ -132,8 +137,18 @@ function(req, res){
 //     } 
 //   }
 // );
+function isAuthenticated(req, res, next) {
+  // do any checks you want to in here
 
-router.get("/profile",function(req,res){
+  // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
+  // you can do this however you want with whatever variables you set up
+  if (req.user)
+      return next();
+// IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+  res.redirect('/login');
+}
+
+router.get("/profile",isAuthenticated,function(req,res){
   //console.log(req.user);
   var loggedin={};
   if(req.user){
@@ -143,7 +158,11 @@ router.get("/profile",function(req,res){
 });
 
 router.get("/userregistration",function(req,res){
-	res.render('registration', {error: {}, page:'User Registration', menuId:'registration',fulldata:{},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
+  var loggedin={};
+  if(req.user){
+    loggedin=1;
+  }
+	res.render('registration', {sessionUser:loggedin,error: {}, page:'User Registration', menuId:'registration',fulldata:{},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
 
