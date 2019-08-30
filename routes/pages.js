@@ -62,18 +62,78 @@ router.get("/login",function(req,res){
 	res.render('login', {sessionUser:loggedin,page:'Login', menuId:'login',error: {},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
+// router.post('/login',checkEmail,passport.authenticate('local', {failureRedirect: '/login'}),
+//         function(req, res){
+//           res.redirect("profile");
+//       }
+// );
 
-
-
-
+// function checkEmail(req,res,next){
+//   check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
+//      check('password').not().isEmpty().withMessage('Password field is required'),
+//      check('email').custom((value, { req }) => {
+//       return new Promise((resolve, reject) => {
+//          userController.findRepByEmail({ 'email': value }, (err, rep) => {
+//           if(rep[0].count==0) {
+//             //console.log(rep[0].count);
+//                 return reject();
+//             } else {
+//               //console.log("test");
+//                 return resolve();
+//             }
+        
+//          });
+//       });
+//    }).withMessage('Email Id doesnt exists.'),
+//   // passport.authenticate('local', {failureRedirect: '/login'}),
+//    function(req, res){
+//     const errors = validationResult(req);
+//     //console.log(errors);
+//     if(!errors.isEmpty()){
+//         var loggedin={};
+//         if(req.user){
+//         loggedin=1;
+//         }
+//        res.render('login',{sessionUser:loggedin,page:'Login', menuId:'login',error: errors.mapped(),successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
+//     }else{
+//      next();
+//     }
+//   }
+// }
 
 router.post('/login', 
-passport.authenticate('local', {failureRedirect: '/login'}),
-function(req, res){
-    res.redirect("profile");  
-//console.log(req.user);
-//res.render('profile', {page:'User Profile', menuId:'User profile'});
-});
+    check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
+    check('password').not().isEmpty().withMessage('Password field is required'),
+
+    function(req, res){
+    const errors = validationResult(req);
+    
+    if(!errors.isEmpty()){
+        var loggedin={};
+        if(req.user){
+        loggedin=1;
+        }
+       res.render('login', {sessionUser:loggedin,page:'Login', menuId:'login',error: errors.mapped(),successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
+     }else{
+       userController.login(req,function(err,result){
+       
+        if(err==1){
+           req.flash('errorMsg', 'you are entered wrong password!.');
+           return res.redirect("login"); 
+        }else if(err==2){
+           req.flash('errorMsg', 'Email Id doesnot exist!.');
+           return res.redirect("login"); 
+        }else if(err==3){
+           req.flash('errorMsg', 'Some thing wrong with query!.');
+           return res.redirect("login"); 
+        }else{ 
+          
+          passport.authenticate('local', {successRedirect:'/profile',failureRedirect: '/login',failureFlash : true})(req,res);
+        }
+       });
+    }
+  }
+);
 
 
 

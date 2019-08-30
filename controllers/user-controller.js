@@ -49,30 +49,30 @@ return cb(null, results);
 };
 
 
-module.exports.loginbk=function(req,res){
-
-
+module.exports.login=function(req,cb){
         var email= req.body.email;
         var password= req.body.password;
         connection.query("SELECT id,email,password FROM users WHERE email=?",[email],function(err, results, fields){
             if (err) {
-                req.flash('errorMsg', 'Some thing wrong with query!.');
-                 return res.redirect("login");
+               // req.flash('errorMsg', 'Some thing wrong with query!.');
+               return cb(3, null);
+               //  return res.redirect("login");
             }else {
                
                if(results.length >0){
                     if(cryptr.decrypt(results[0].password) == password){
-                        req.session.email = email;
-                        req.session.user_id = results[0].id;
-                        return res.redirect("profile"); 
+                        //req.session.email = email;
+                       // req.session.user_id = results[0].id;
+                       return cb(null, results);
+                       // return res.redirect("profile"); 
                     }else{
-                      req.flash('errorMsg', 'Email Id and password doesnot match!.');
-                      return res.redirect("login");  
+                      return cb(1, null);
                     }
 
                 }else{
-                 req.flash('errorMsg', 'Email Id doesnot exist!.');
-                 return res.redirect("login"); 
+                  return cb(2, null);
+                // req.flash('errorMsg', 'Email Id doesnot exist!.');
+                 //return res.redirect("login"); 
                 }
 
             }
