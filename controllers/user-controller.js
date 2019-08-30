@@ -35,6 +35,33 @@ module.exports.register=function(req,res){
 }
 // user registration controller function end from here
 
+// user profile update controller function start from here
+module.exports.updateprofile=function(req,res){
+                console.log(req.body);
+               // res.end();
+               var file_name = ''; 
+               if(req.file){
+                file_name = req.file.originalname;
+                }
+                // var updatedata={
+                // "username":req.body.username,
+                // "profile_img":file_name
+                // }
+                var sqlquery="UPDATE users SET username= ?,profile_img=? WHERE email = ?";
+                connection.query(sqlquery,[req.body.username,file_name,req.body.email], function (error, results, fields) {
+                if (error) {
+                 req.flash('errorMsg', 'User profile update failed!.');
+                 return res.redirect("editprofile");
+                }else{
+                //on success
+                req.flash('successMsg', 'User profile update successfully done!');
+                return res.redirect("editprofile");
+                }
+                });
+}
+// user profile update controller function end from here
+
+
 
 // login controller function start from here
 

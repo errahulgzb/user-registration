@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partial/head %> 
+</head>
+<body>
+<% include partial/menu %>
+<div class="container">    
+  <h3><%= page %></h3><br>
+  
+
+
+  
+<% if(typeof successMsg != 'undefined' && successMsg!="") { %>
+<div class="alert alert-success"><%- successMsg %></div>
+<% }%>
+<% if(typeof errorMsg != 'undefined' && errorMsg!="") { %>
+<div class="alert alert-danger"><%- errorMsg %></div>
+<% }%>
+  
+
+      <form action="/editprofile" method="POST" enctype="multipart/form-data">
+
+    
+    
+
+         <div class="row">
+      <div class="col-sm-8">
+      <!-- E-mail -->
+      <label for="email">E-mail</label>
+     
+        <input type="text" id="email" name="email" placeholder="Please enter email Id." value="<%= userdetail[0].email %>" class="form-control" readonly>
+       <% if ( error.hasOwnProperty('email') ) { %>
+        <span class="error"> <%= error.email.msg %> </span>
+        <% } %>
+      </div>
+    </div>
+    <!-- Username -->
+    <div class="row">
+      <div class="col-sm-8">
+      
+      <label for="username">Username</label>
+     
+        <input type="text" id="username" name="username" placeholder="Please enter username." value="<%= userdetail[0].username %>" class="form-control">
+        <% if ( error.hasOwnProperty('username') ) { %>
+        <span class="error"> <%= error.username.msg %> </span>
+        <% } %>
+       
+      </div>
+    </div>
+ 
+   <!-- User Profile Image -->
+    <div class="row">
+      <div class="col-sm-8">
+      
+      <label for="username">Profile Image</label>
+     
+        <input type="file" id="profile_img" name="profile_img">
+        <% if ( error.hasOwnProperty('profile_img') ) { %>
+        <span class="error"> <%= error.profile_img.msg %> </span>
+        <% } %>
+       
+      </div>
+    </div>
+ 
+ 
+    
+ <br/>
+    <div class="row">
+      <div class="col-sm-8">
+      <!-- Button -->
+     
+        <button class="btn btn-success">Update Profile</button>
+      </div>
+    </div>
+
+</form>
+</div>
+</body>
+<% include partial/script %>
+</html>

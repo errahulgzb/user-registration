@@ -4,6 +4,11 @@ const Cryptr = require('cryptr');
 const cryptr = new Cryptr('secretKeys');
 const router=express.Router();
 const { check, validationResult } = require('express-validator');
+// multer script start here
+var multer  = require('multer');
+var path = require("path");
+var upload = multer({ dest: path.join('public', "./uploads/") });
+var fs = require("fs");
 // controllers include 
 var userController=require('./../controllers/user-controller');
 // passport script
@@ -130,10 +135,58 @@ router.get("/profile",isAuthenticated,function(req,res){
     loggedin=1;
     userdetail=JSON.parse(JSON.stringify(req.user));
   }
-  //console.log(userdetail);
-  //console.log(userdetail[0].username);
   res.render('profile', {page:'User Profile', sessionUser:loggedin,menuId:'User profile',userdetail:userdetail});
 });
+
+// get to edit profile page
+router.get("/editprofile",isAuthenticated,function(req,res){
+  console.log(req.user);
+  var loggedin=userdetail={};
+  if(req.user){
+    loggedin=1;
+    userdetail=JSON.parse(JSON.stringify(req.user));
+  }
+  res.render('editprofile', {page:'Edit Profile', error:{},sessionUser:loggedin,menuId:'Edit profile',userdetail:userdetail});
+});
+
+// get to edit profile action 
+const handleError = (err, res) => {
+  res
+    .status(500)
+    .contentType("text/plain")
+    .end("Oops! Something went wrong!");
+};
+
+router.post("/editprofile",
+  upload.single("profile_img"),
+  check('username').not().isEmpty().withMessage("User Name field is required"),
+ function(req,res,next){
+    const errors=validationResult(req);
+    console.log(errors);
+    if(!errors.isEmpty()){
+      var loggedin=userdetail={};
+      if(req.user){
+      loggedin=1;
+      userdetail=JSON.parse(JSON.stringify(req.user));
+      }
+      res.render('editprofile', {sessionUser:loggedin,userdetail:userdetail,fulldata:req.body,page:'Edit profile', menuId:'editprofile', error: errors.mapped()});
+    }else{
+     // console.log("");
+      if(req.file){
+            const tempPath = req.file.path;
+            console.log(tempPath);
+            console.log(req.file.originalname);
+            const targetPath = path.join('public', "./uploads/"+req.file.originalname);
+            fs.rename(tempPath, targetPath, err => {
+              if (err) return handleError(err, res);
+
+            });
+          }
+      userController.updateprofile(req,res);
+      }
+    }
+  );
+
 
 // get into user registration page
 router.get("/userregistration",function(req,res){
