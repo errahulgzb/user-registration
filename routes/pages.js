@@ -10,7 +10,6 @@ var userController=require('./../controllers/user-controller');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 
-
 passport.use(new Strategy({usernameField:"email", passwordField:"password"},
   function(usernameField, passwordField, cb) {
    
@@ -25,7 +24,7 @@ passport.use(new Strategy({usernameField:"email", passwordField:"password"},
   }));
 
 passport.serializeUser(function(user, cb) {
-  console.log(user[0].id);
+  //console.log(user[0].id);
   cb(null, user[0].id);
 });
 
@@ -37,70 +36,40 @@ passport.deserializeUser(function(uid, cb) {
   });
 });
 
+// passport script end
+
+
 // get into index page
 
 router.get("/",function(req,res){
- var loggedin={};
+ var loggedin=userdetail={};
   if(req.user){
     loggedin=1;
+    userdetail=req.user;
   }
-	res.render('index', {sessionUser:loggedin,page:'Home', menuId:'home'});
+	res.render('index', {sessionUser:loggedin,userdetail:userdetail,page:'Home', menuId:'home',successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
+// get into about us page
 router.get("/about",function(req,res){
-  var loggedin={};
+ var loggedin=userdetail={};
   if(req.user){
     loggedin=1;
+    userdetail=req.user;
   }
-	res.render('aboutus', {sessionUser:loggedin,page:'About Us', menuId:'aboutus'});
+	res.render('aboutus', {sessionUser:loggedin,userdetail:userdetail,page:'About Us', menuId:'aboutus'});
 });
 
+// get into login page
 router.get("/login",function(req,res){
-  var loggedin={};
+  var loggedin=userdetail={};
   if(req.user){
     loggedin=1;
+    userdetail=req.user;
   }
-	res.render('login', {sessionUser:loggedin,page:'Login', menuId:'login',error: {},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
+	res.render('login', {sessionUser:loggedin,userdetail:userdetail,page:'Login', menuId:'login',error: {},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
-// router.post('/login',checkEmail,passport.authenticate('local', {failureRedirect: '/login'}),
-//         function(req, res){
-//           res.redirect("profile");
-//       }
-// );
-
-// function checkEmail(req,res,next){
-//   check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
-//      check('password').not().isEmpty().withMessage('Password field is required'),
-//      check('email').custom((value, { req }) => {
-//       return new Promise((resolve, reject) => {
-//          userController.findRepByEmail({ 'email': value }, (err, rep) => {
-//           if(rep[0].count==0) {
-//             //console.log(rep[0].count);
-//                 return reject();
-//             } else {
-//               //console.log("test");
-//                 return resolve();
-//             }
-        
-//          });
-//       });
-//    }).withMessage('Email Id doesnt exists.'),
-//   // passport.authenticate('local', {failureRedirect: '/login'}),
-//    function(req, res){
-//     const errors = validationResult(req);
-//     //console.log(errors);
-//     if(!errors.isEmpty()){
-//         var loggedin={};
-//         if(req.user){
-//         loggedin=1;
-//         }
-//        res.render('login',{sessionUser:loggedin,page:'Login', menuId:'login',error: errors.mapped(),successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
-//     }else{
-//      next();
-//     }
-//   }
-// }
-
+// get into login action 
 router.post('/login', 
     check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
     check('password').not().isEmpty().withMessage('Password field is required'),
@@ -127,76 +96,21 @@ router.post('/login',
            req.flash('errorMsg', 'Some thing wrong with query!.');
            return res.redirect("login"); 
         }else{ 
-          
+
           passport.authenticate('local', {successRedirect:'/profile',failureRedirect: '/login',failureFlash : true})(req,res);
         }
        });
     }
   }
 );
+// get into logout page
+router.get('/logout', function(req, res){
+  req.logout();
+  req.flash('successMsg', 'you are successfully logout!');
+  res.redirect('/');
+});
 
-
-
-// router.post("/login", 
-//   check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
-//   check('password').not().isEmpty().withMessage('Password field is required'),
-// function(req, res){
-//     const errors = validationResult(req);
-//     //console.log(errors);
-//     if(!errors.isEmpty()){
-//       //res.end();
-//        res.render('login', {page:'Login', menuId:'login',error: errors.mapped(),successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
-//     }else{
-
-//     passport.use('local', new LocalStrategy({
-//     usernameField: 'email',
-//     passwordField: 'password',
-//     passReqToCallback: true //passback entire req to call back
-//     } , function (req, email, password, done){
-//     if(!email || !password ) {
-//        req.flash('message','All fields are required.');
-//       return res.redirect("login"); 
-//      //return done(null, false, req.flash('message','All fields are required.')); 
-//      }
-    
-//     // connection.query("select * from tbl_users where username = ?", [username], function(err, rows){
-//     //   console.log(err); console.log(rows);
-//     // if (err) return done(req.flash('message',err));
-//     // if(!rows.length){ return done(null, false, req.flash('message','Invalid username or password.')); }
-//     // salt = salt+''+password;
-//     // var encPassword = crypto.createHash('sha1').update(salt).digest('hex');
-//     // var dbPassword  = rows[0].password;
-//     // if(!(dbPassword == encPassword)){
-//     //     return done(null, false, req.flash('message','Invalid username or password.'));
-//     //  }
-//     // return done(null, rows[0]);
-//     // });
-
-//     }
-//     ));
-
-
-
-   
-//  }
-// );
-
-
-// router.post("/login",
-//     check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
-//     check('password').not().isEmpty().withMessage('Password field is required'),
-//     function(req, res){
-//     const errors = validationResult(req);
-//     //console.log(errors);
-//     if(!errors.isEmpty()){
-//       //res.end();
-//        res.render('login', {page:'Login', menuId:'login',error: errors.mapped(),successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
-//     }else{
-//       userController.login(req,res);
-
-//     } 
-//   }
-// );
+// get into authentication 
 function isAuthenticated(req, res, next) {
   // do any checks you want to in here
 
@@ -208,24 +122,32 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
+// get into profile page
 router.get("/profile",isAuthenticated,function(req,res){
   //console.log(req.user);
-  var loggedin={};
+  var loggedin=userdetail={};
   if(req.user){
     loggedin=1;
+    userdetail=JSON.parse(JSON.stringify(req.user));
   }
-  res.render('profile', {page:'User Profile', sessionUser:loggedin,menuId:'User profile'});
+  //console.log(userdetail);
+  //console.log(userdetail[0].username);
+  res.render('profile', {page:'User Profile', sessionUser:loggedin,menuId:'User profile',userdetail:userdetail});
 });
 
+// get into user registration page
 router.get("/userregistration",function(req,res){
-  var loggedin={};
+  var loggedin=userdetail={};
+
   if(req.user){
     loggedin=1;
+    userdetail=req.user;
   }
-	res.render('registration', {sessionUser:loggedin,error: {}, page:'User Registration', menuId:'registration',fulldata:{},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
+
+	res.render('registration', {sessionUser:loggedin,userdetail:userdetail,error: {}, page:'User Registration', menuId:'registration',fulldata:{},successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
-
+// get into user registration action 
 router.post('/userregistration', 
 	  check('username').not().isEmpty().withMessage('User Name field is required'),
     check('email').not().isEmpty().withMessage('Email Id field is required').isEmail().withMessage('Please enter a Valid Email'),
@@ -261,8 +183,13 @@ router.post('/userregistration',
 		const errors = validationResult(req);
 		//console.log(errors);
 		if(!errors.isEmpty()){
+      var loggedin=userdetail={};
+      if(req.user){
+      loggedin=1;
+      userdetail=req.user;
+      }
 			//res.end();
-			 res.render('registration', {fulldata:req.body,page:'User Registration', menuId:'registration', error: errors.mapped()});
+			 res.render('registration', {sessionUser:loggedin,userdetail:userdetail,fulldata:req.body,page:'User Registration', menuId:'registration', error: errors.mapped()});
 		}else{
 			userController.register(req,res);
 
