@@ -135,18 +135,18 @@ router.get("/profile",isAuthenticated,function(req,res){
     loggedin=1;
     userdetail=JSON.parse(JSON.stringify(req.user));
   }
-  res.render('profile', {page:'User Profile', sessionUser:loggedin,menuId:'User profile',userdetail:userdetail});
+  res.render('profile', {page:'User Profile', sessionUser:loggedin,menuId:'User profile',userdetail:userdetail,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
 // get to edit profile page
 router.get("/editprofile",isAuthenticated,function(req,res){
-  console.log(req.user);
+ // console.log(req.user);
   var loggedin=userdetail={};
   if(req.user){
     loggedin=1;
     userdetail=JSON.parse(JSON.stringify(req.user));
   }
-  res.render('editprofile', {page:'Edit Profile', error:{},sessionUser:loggedin,menuId:'Edit profile',userdetail:userdetail});
+  res.render('editprofile', {page:'Edit Profile', error:{},sessionUser:loggedin,menuId:'Edit profile',userdetail:userdetail,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg')});
 });
 
 // get to edit profile action 
@@ -162,7 +162,7 @@ router.post("/editprofile",
   check('username').not().isEmpty().withMessage("User Name field is required"),
  function(req,res,next){
     const errors=validationResult(req);
-    console.log(errors);
+   // console.log(errors);
     if(!errors.isEmpty()){
       var loggedin=userdetail={};
       if(req.user){
@@ -171,18 +171,8 @@ router.post("/editprofile",
       }
       res.render('editprofile', {sessionUser:loggedin,userdetail:userdetail,fulldata:req.body,page:'Edit profile', menuId:'editprofile', error: errors.mapped()});
     }else{
-     // console.log("");
-      if(req.file){
-            const tempPath = req.file.path;
-            console.log(tempPath);
-            console.log(req.file.originalname);
-            const targetPath = path.join('public', "./uploads/"+req.file.originalname);
-            fs.rename(tempPath, targetPath, err => {
-              if (err) return handleError(err, res);
-
-            });
-          }
-      userController.updateprofile(req,res);
+    
+     userController.updateprofile(req,res);
       }
     }
   );

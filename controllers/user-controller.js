@@ -6,8 +6,8 @@ var flash = require('req-flash');
 //var flash = require('connect-flash');
 var express=require("express");
 var connection = require('./../config/config');
-
-
+var path = require("path");
+var fs = require("fs");
 
 // user registration controller function start from here
 module.exports.register=function(req,res){
@@ -37,16 +37,37 @@ module.exports.register=function(req,res){
 
 // user profile update controller function start from here
 module.exports.updateprofile=function(req,res){
-                console.log(req.body);
+                
+                var today= Number(new Date());
                // res.end();
                var file_name = ''; 
                if(req.file){
-                file_name = req.file.originalname;
-                }
-                // var updatedata={
-                // "username":req.body.username,
-                // "profile_img":file_name
-                // }
+                file_name = today+req.file.originalname;
+                
+                // file removing from server uploading directory start from here
+                  connection.query("SELECT id,email,profile_img FROM users WHERE email=?",[req.body.email],function(err, results, fields){
+                    if(results.length >0){
+                        const targetPath = path.join('public', "./uploads/"+results[0].profile_img);
+                        fs.unlink(targetPath, function (err) {
+                        if (err) throw err;
+                            // if no error, file has been deleted successfully
+                            console.log('File deleted!');
+                        });
+                    }
+                   })
+                // file removing from server uploading directory end from here
+
+                // file uploading to server uploading directory start from here
+                  const tempPath = req.file.path;
+                  const targetPath = path.join('public', "./uploads/"+today+req.file.originalname);
+                  fs.rename(tempPath, targetPath, err => {
+                  if (err) return handleError(err, res);
+
+                  });
+                // file uploading to server uploading directory end from here
+                 
+                
+               // user data updating query from start here
                 var sqlquery="UPDATE users SET username= ?,profile_img=? WHERE email = ?";
                 connection.query(sqlquery,[req.body.username,file_name,req.body.email], function (error, results, fields) {
                 if (error) {
@@ -58,6 +79,23 @@ module.exports.updateprofile=function(req,res){
                 return res.redirect("editprofile");
                 }
                 });
+               }else{
+
+                // user data updating query from start here
+                var sqlquery="UPDATE users SET username= ? WHERE email = ?";
+                connection.query(sqlquery,[req.body.username,req.body.email], function (error, results, fields) {
+                if (error) {
+                 req.flash('errorMsg', 'User profile update failed!.');
+                 return res.redirect("editprofile");
+                }else{
+                //on success
+                req.flash('successMsg', 'User profile update successfully done!');
+                return res.redirect("editprofile");
+                }
+                });
+
+               }
+                // user data updating query from end here
 }
 // user profile update controller function end from here
 
