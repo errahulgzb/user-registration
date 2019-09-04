@@ -12,11 +12,13 @@ const expressValidator = require('express-validator');
 // passport script
 var passport          = require('passport');
 var LocalStrategy     = require('passport-local').Strategy;
+
 // var BetterMemoryStore = require(__dirname + '/memory');
 // var store = new BetterMemoryStore({ expires: 60 * 60 * 1000, debug: true });
 const app=express();
 
-
+// for date format
+app.locals.moment = require('moment');
 // server static files
 app.use('/public',  express.static(__dirname + '/public'));
 

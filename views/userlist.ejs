@@ -26,7 +26,7 @@
   <thead>
     <tr>
       <th>Sr.no</th>
-      <th>Name</th>
+      <th>User Name</th>
       <th>Email Id</th>
       <th>Profile Image</th>
       <th>Created Date</th>
@@ -54,8 +54,8 @@
         <% }else{%><img src="/public/uploads/default.png" style="height: 100px;width: 100px;">
         <%}%>
       </td>
-      <td><%= userlists[key].created_at %></td>
-      <td>Edit</td>
+      <td><%= moment(userlists[key].created_at).format('DD-MM-YYYY H:m:s') %></td>
+      <td><a class="btn" href="#"><i class="icon-edit"></i> Edit</a></td>
     </tr>
     
     <% } %>
