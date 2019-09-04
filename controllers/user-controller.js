@@ -99,6 +99,24 @@ module.exports.updateprofile=function(req,res){
 }
 // user profile update controller function end from here
 
+// show all user list 
+
+module.exports.alluserlist=function(req,res){
+  connection.query('SELECT * FROM users ORDER BY created_at DESC',function(error, results, fields){
+
+    var loggedin=userdetail={};
+    if(req.user){
+      loggedin=1;
+      userdetail=JSON.parse(JSON.stringify(req.user));
+    }
+    console.log(results);
+  res.render('userlist', {page:'User List', sessionUser:loggedin,menuId:'User List',userdetail:userdetail,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg'),userlists:results});
+
+  });
+   
+}
+
+
 
 
 // login controller function start from here

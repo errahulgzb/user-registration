@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partial/head %> 
+</head>
+<body>
+<% include partial/menu %>
+<div class="container">    
+  <h3><%= page %></h3><br>
+  
+
+
+  
+<% if(typeof successMsg != 'undefined' && successMsg!="") { %>
+<div class="alert alert-success"><%- successMsg %></div>
+<% }%>
+<% if(typeof errorMsg != 'undefined' && errorMsg!="") { %>
+<div class="alert alert-danger"><%- errorMsg %></div>
+<% }%>
+  
+
+     <!--Table-->
+<table class="table table-hover table-fixed">
+
+  <!--Table head-->
+  <thead>
+    <tr>
+      <th>Sr.no</th>
+      <th>Name</th>
+      <th>Email Id</th>
+      <th>Profile Image</th>
+      <th>Created Date</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <!--Table head-->
+
+  <!--Table body-->
+  
+  
+ 
+  <tbody>
+    <% 
+    var scale_text=1;
+    for (var key in userlists) { 
+
+    %>
+    <tr>
+      <th scope="row"><%= scale_text++ %></th>
+      <td><%= userlists[key].username %></td>
+      <td><%= userlists[key].email %></td>
+      <td><% if(userlists[key].profile_img!=""){%>
+          <img src="/public/uploads/<%=userlists[key].profile_img%>" style="height: 100px;width: 100px;">
+        <% }else{%><img src="/public/uploads/default.png" style="height: 100px;width: 100px;">
+        <%}%>
+      </td>
+      <td><%= userlists[key].created_at %></td>
+      <td>Edit</td>
+    </tr>
+    
+    <% } %>
+    
+   
+    
+  </tbody>
+  <!--Table body-->
+
+</table>
+<!--Table-->
+
+</div>
+<% include partial/footer %>
+</body>
+<% include partial/script %>
+
+</html>

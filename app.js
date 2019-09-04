@@ -27,7 +27,7 @@ app.set("view engine","ejs");
 
 
 // for flash message script
-app.use(session({ cookie: { maxAge: 60000 }, 
+app.use(session({ cookie: { maxAge: 1000000000 }, 
                   secret: 'woot',
                   resave: true, 
                   saveUninitialized: false}));

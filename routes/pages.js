@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 var multer  = require('multer');
 var path = require("path");
 var upload = multer({ dest: path.join('public', "./uploads/") });
+var jwt = require('jsonwebtoken');
 var fs = require("fs");
 // controllers include 
 var userController=require('./../controllers/user-controller');
@@ -43,6 +44,13 @@ passport.deserializeUser(function(uid, cb) {
 
 // passport script end
 
+// get jwt toekn
+
+router.get('/jwt', (req, res) => {
+    let privateKey = fs.readFileSync('./private.pem', 'utf8');
+    let token = jwt.sign({ "body": "stuff" }, "MySuperSecretPassPhrase", { algorithm: 'HS256'});
+    res.send(token);
+})
 
 // get into index page
 
@@ -109,14 +117,51 @@ router.post('/login',
   }
 );
 // get into logout page
-router.get('/logout', function(req, res){
-  req.logout();
-  req.flash('successMsg', 'you are successfully logout!');
-  res.redirect('/');
+router.get("/logout", function(req, res) {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+
+    req.logOut();
+    req.session.destroy();
+    res.redirect("/");
 });
+
+// router.get('/logout', function(req, res){
+//   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+//   res.locals.user = null;
+//   req.logout();
+//   req.flash('successMsg', 'you are successfully logout!');
+//   res.redirect('/');
+// });
 
 // get into authentication 
 function isAuthenticated(req, res, next) {
+
+  // if(typeof req.headers.authorization !== "undefined") {
+  //       // retrieve the authorization header and parse out the
+  //       // JWT using the split function
+  //       let token = req.headers.authorization.split(" ")[1];
+  //       let privateKey = fs.readFileSync('./private.pem', 'utf8');
+  //       // Here we validate that the JSON Web Token is valid and has been 
+  //       // created using the same private pass phrase
+  //       jwt.verify(token, privateKey, { algorithm: "HS256" }, (err, user) => {
+            
+  //           // if there has been an error...
+  //           if (err) {  
+  //               // shut them out!
+  //               res.status(500).json({ error: "Not Authorized" });
+  //               throw new Error("Not Authorized");
+  //           }
+  //           // if the JWT is valid, allow them to hit
+  //           // the intended endpoint
+  //           return next();
+  //       });
+  //   } else {
+  //       // No authorization header exists on the incoming
+  //       // request, return not authorized and throw a new error 
+  //       res.status(500).json({ error: "Not Authorized" });
+  //       throw new Error("Not Authorized");
+  //   }
+
   // do any checks you want to in here
 
   // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
@@ -126,6 +171,11 @@ function isAuthenticated(req, res, next) {
 // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
   res.redirect('/login');
 }
+// get into profile page
+router.get("/userlist",isAuthenticated,function(req,res){
+  //console.log(req.user);
+ userController.alluserlist(req,res);
+});
 
 // get into profile page
 router.get("/profile",isAuthenticated,function(req,res){
