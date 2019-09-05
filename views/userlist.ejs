@@ -55,7 +55,7 @@
         <%}%>
       </td>
       <td><%= moment(userlists[key].created_at).format('DD-MM-YYYY H:m:s') %></td>
-      <td><a class="btn" href="#"><i class="icon-edit"></i> Edit</a></td>
+      <td><a class="btn" href="/edituserlist/<%= userlists[key].id %>"><i class="icon-edit"></i> Edit</a></td>
     </tr>
     
     <% } %>

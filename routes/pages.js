@@ -119,9 +119,10 @@ router.post('/login',
 // get into logout page
 router.get("/logout", function(req, res) {
   res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-
+    req.flash('successMsg', 'you are successfully logout!');
     req.logOut();
     req.session.destroy();
+    
     res.redirect("/");
 });
 
@@ -176,6 +177,32 @@ router.get("/userlist",isAuthenticated,function(req,res){
   //console.log(req.user);
  userController.alluserlist(req,res);
 });
+
+// get into edit user list page
+router.get("/edituserlist/:user_id",isAuthenticated,function(req,res){
+ userController.getuserdetailbyid(req.params.user_id,function(err,userinfo){
+  var loggedin={};
+  if(req.user){
+    loggedin=1;
+    userinfo=JSON.parse(JSON.stringify(userinfo));
+  }
+  res.render('edituserlist', {page:'Edit User detail', sessionUser:loggedin,menuId:'Edit User detail',userinfo:userinfo,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg'),error:{}});
+ });
+});
+
+// get into edit user list page action post
+router.post("/edituserlist/:user_id",isAuthenticated,function(req,res){
+  userController.getuserdetailbyid(req.params.user_id,function(err,userinfo){
+   var loggedin={};
+   if(req.user){
+     loggedin=1;
+     userinfo=JSON.parse(JSON.stringify(userinfo));
+   }
+   res.render('edituserlist', {page:'Edit User detail', sessionUser:loggedin,menuId:'Edit User detail',userinfo:userinfo,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg'),error:{}});
+  });
+ });
+
+
 
 // get into profile page
 router.get("/profile",isAuthenticated,function(req,res){

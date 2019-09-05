@@ -109,7 +109,7 @@ module.exports.alluserlist=function(req,res){
       loggedin=1;
       userdetail=JSON.parse(JSON.stringify(req.user));
     }
-    console.log(results);
+   // console.log(results);
   res.render('userlist', {page:'User List', sessionUser:loggedin,menuId:'User List',userdetail:userdetail,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg'),userlists:results});
 
   });
@@ -117,7 +117,15 @@ module.exports.alluserlist=function(req,res){
 }
 
 
+// user detail by user id
 
+module.exports.getuserdetailbyid=function(userid,cb){
+connection.query("SELECT * FROM users WHERE id=?",userid,function(errors,results,fields){
+if(errors) console.log(errors);
+ //console.log(results);
+return cb(null, results);
+});
+};
 
 // login controller function start from here
 

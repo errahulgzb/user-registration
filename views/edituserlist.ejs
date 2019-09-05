@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partial/head %> 
+</head>
+<body>
+<% include partial/menu %>
+<div class="container">    
+  <h3><%= page %></h3><br>
+  
+
+
+  
+<% if(typeof successMsg != 'undefined' && successMsg!="") { %>
+<div class="alert alert-success"><%- successMsg %></div>
+<% }%>
+<% if(typeof errorMsg != 'undefined' && errorMsg!="") { %>
+<div class="alert alert-danger"><%- errorMsg %></div>
+<% }%>
+  
+<div class="text-right"><a class="btn btn-success" href="/userlist">back</a></div>
+      <form action="/edituserlist/<%= userinfo[0].id %>" method="POST" enctype="multipart/form-data">
+
+    
+    
+
+         <div class="row">
+      <div class="col-sm-8">
+      <!-- E-mail -->
+      <label for="email">E-mail</label>
+     
+        <input type="text" id="email" name="email" placeholder="Please enter email Id." value="<%= userinfo[0].email %>" class="form-control" readonly>
+       <% if ( error.hasOwnProperty('email') ) { %>
+        <span class="error"> <%= error.email.msg %> </span>
+        <% } %>
+      </div>
+    </div>
+    <!-- Username -->
+    <div class="row">
+      <div class="col-sm-8">
+      
+      <label for="username">Username</label>
+     
+        <input type="text" id="username" name="username" placeholder="Please enter username." value="<%= userinfo[0].username %>" class="form-control">
+        <% if ( error.hasOwnProperty('username') ) { %>
+        <span class="error"> <%= error.username.msg %> </span>
+        <% } %>
+       
+      </div>
+    </div>
+ 
+   <!-- User Profile Image -->
+    <div class="row">
+      <div class="col-sm-8">
+      
+      <label for="username">Profile Image</label>
+     
+        <input type="file" id="profile_img" name="profile_img">
+        <% if ( error.hasOwnProperty('profile_img') ) { %>
+        <span class="error"> <%= error.profile_img.msg %> </span>
+        <% } if(userinfo[0].profile_img!=""){%>
+       <img id="blah" src="/public/uploads/<%= userinfo[0].profile_img %>" alt="your image" class="profile-img" />
+       <%}else{%>
+        <img id="blah" src="/public/uploads/default.png" alt="your image" class="profile-img" />
+        <%}%>
+      </div>
+    </div>
+ 
+ 
+    
+ <br/>
+    <div class="row">
+      <div class="col-sm-8">
+      <!-- Button -->
+     
+        <button class="btn btn-success">Update</button>
+      </div>
+    </div>
+
+</form>
+</div>
+</body>
+<% include partial/script %>
+<% include partial/footer %>
+</html>
