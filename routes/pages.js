@@ -191,16 +191,27 @@ router.get("/edituserlist/:user_id",isAuthenticated,function(req,res){
 });
 
 // get into edit user list page action post
-router.post("/edituserlist/:user_id",isAuthenticated,function(req,res){
-  userController.getuserdetailbyid(req.params.user_id,function(err,userinfo){
-   var loggedin={};
-   if(req.user){
-     loggedin=1;
-     userinfo=JSON.parse(JSON.stringify(userinfo));
-   }
-   res.render('edituserlist', {page:'Edit User detail', sessionUser:loggedin,menuId:'Edit User detail',userinfo:userinfo,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg'),error:{}});
-  });
- });
+router.post("/edituserlist/:user_id",
+upload.single("profile_img"),
+check('username').not().isEmpty().withMessage("User Name field is required"),
+function(req,res,next){
+  const errors=validationResult(req);
+ // console.log(errors);
+  if(!errors.isEmpty()){
+    var loggedin=userinfo={};
+    if(req.user){
+    loggedin=1;
+    userinfo=JSON.parse(JSON.stringify(req.body));
+    }
+    console.log(userinfo);
+    res.render('edituserlist', {sessionUser:loggedin,userinfo:userinfo,page:'Edit User detail', menuId:'edit User detail', error: errors.mapped()});
+  }else{
+  
+   userController.updateprofile(req,res);
+    }
+  }
+  
+  );
 
 
 
