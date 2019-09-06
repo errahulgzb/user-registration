@@ -19,7 +19,7 @@
 <% }%>
   
 <div class="text-right"><a class="btn btn-success" href="/userlist">back</a></div>
-      <form action="/edituserlist/<%= userinfo[0].id %>" method="POST" enctype="multipart/form-data">
+      <form action="/edituserlist/<%= user_id %>" method="POST" enctype="multipart/form-data">
 
     
     
@@ -29,10 +29,8 @@
       <!-- E-mail -->
       <label for="email">E-mail</label>
      
-        <input type="text" id="email" name="email" placeholder="Please enter email Id." value="<%= userinfo[0].email %>" class="form-control" readonly>
-       <% if ( error.hasOwnProperty('email') ) { %>
-        <span class="error"> <%= error.email.msg %> </span>
-        <% } %>
+        <input type="text" id="email" name="email" placeholder="Please enter email Id." value="<%= userinfo.email %>" class="form-control" readonly>
+       
       </div>
     </div>
     <!-- Username -->
@@ -41,7 +39,7 @@
       
       <label for="username">Username</label>
      
-        <input type="text" id="username" name="username" placeholder="Please enter username." value="<%= userinfo[0].username %>" class="form-control">
+        <input type="text" id="username" name="username" placeholder="Please enter username." value="<%= userinfo.username %>" class="form-control">
         <% if ( error.hasOwnProperty('username') ) { %>
         <span class="error"> <%= error.username.msg %> </span>
         <% } %>
@@ -58,8 +56,8 @@
         <input type="file" id="profile_img" name="profile_img">
         <% if ( error.hasOwnProperty('profile_img') ) { %>
         <span class="error"> <%= error.profile_img.msg %> </span>
-        <% } if(userinfo[0].profile_img!=""){%>
-       <img id="blah" src="/public/uploads/<%= userinfo[0].profile_img %>" alt="your image" class="profile-img" />
+        <% } if(userinfo.profile_img!=""){%>
+       <img id="blah" src="/public/uploads/<%= userinfo.profile_img %>" alt="your image" class="profile-img" />
        <%}else{%>
         <img id="blah" src="/public/uploads/default.png" alt="your image" class="profile-img" />
         <%}%>

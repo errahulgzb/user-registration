@@ -115,9 +115,73 @@ module.exports.alluserlist=function(req,res){
   });
    
 }
-
-
 // user detail by user id
+
+
+// user detail update controller function start from here
+module.exports.updateuserdetailbyid=function(req,res){
+                
+  var today= Number(new Date());
+ // res.end();
+ var file_name = ''; 
+ if(req.file){
+  file_name = today+req.file.originalname;
+  
+  // file removing from server uploading directory start from here
+    connection.query("SELECT id,email,profile_img FROM users WHERE id=?",[req.params.user_id],function(err, results, fields){
+      if(results[0].profile_img !=""){
+          const targetPath = path.join('public', "./uploads/"+results[0].profile_img);
+          fs.unlink(targetPath, function (err) {
+          if (err) throw err;
+              // if no error, file has been deleted successfully
+              console.log('File deleted!');
+          });
+      }
+     })
+  // file removing from server uploading directory end from here
+
+  // file uploading to server uploading directory start from here
+    const tempPath = req.file.path;
+    const targetPath = path.join('public', "./uploads/"+today+req.file.originalname);
+    fs.rename(tempPath, targetPath, err => {
+    if (err) return handleError(err, res);
+
+    });
+  // file uploading to server uploading directory end from here
+   
+  
+ // user data updating query from start here
+  var sqlquery="UPDATE users SET username= ?,profile_img=? WHERE id = ?";
+  connection.query(sqlquery,[req.body.username,file_name,req.params.user_id], function (error, results, fields) {
+      if (error) {
+      req.flash('errorMsg', 'User detail update failed!.');
+      return res.redirect("/userlist");
+      }else{
+      //on success
+      req.flash('successMsg', 'User detail update successfully done!');
+      return res.redirect("/userlist");
+      }
+  });
+ }else{
+
+  // user data updating query from start here
+  var sqlquery="UPDATE users SET username= ? WHERE id = ?";
+  connection.query(sqlquery,[req.body.username,req.params.user_id], function (error, results, fields) {
+      if (error) {
+      req.flash('errorMsg', 'User detail update failed!.');
+      return res.redirect("/userlist");
+      }else{
+      //on success
+      req.flash('successMsg', 'User detail update successfully done!');
+      return res.redirect("/userlist");
+      }
+  });
+
+ }
+  // user data updating query from end here
+};
+// user detail update controller function end from here
+
 
 module.exports.getuserdetailbyid=function(userid,cb){
 connection.query("SELECT * FROM users WHERE id=?",userid,function(errors,results,fields){

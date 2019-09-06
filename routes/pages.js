@@ -186,7 +186,7 @@ router.get("/edituserlist/:user_id",isAuthenticated,function(req,res){
     loggedin=1;
     userinfo=JSON.parse(JSON.stringify(userinfo));
   }
-  res.render('edituserlist', {page:'Edit User detail', sessionUser:loggedin,menuId:'Edit User detail',userinfo:userinfo,successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg'),error:{}});
+  res.render('edituserlist', {page:'Edit User detail', sessionUser:loggedin,menuId:'Edit User detail',userinfo:userinfo[0],successMsg: req.flash('successMsg'),errorMsg: req.flash('errorMsg'),error:{},user_id:req.params.user_id});
  });
 });
 
@@ -204,10 +204,10 @@ function(req,res,next){
     userinfo=JSON.parse(JSON.stringify(req.body));
     }
     console.log(userinfo);
-    res.render('edituserlist', {sessionUser:loggedin,userinfo:userinfo,page:'Edit User detail', menuId:'edit User detail', error: errors.mapped()});
+    res.render('edituserlist', {sessionUser:loggedin,userinfo:userinfo,page:'Edit User detail', menuId:'edit User detail', error: errors.mapped(),user_id:req.params.user_id});
   }else{
   
-   userController.updateprofile(req,res);
+   userController.updateuserdetailbyid(req,res);
     }
   }
   
