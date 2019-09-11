@@ -12,6 +12,7 @@ var jwt = require('jsonwebtoken');
 var fs = require("fs");
 // controllers include 
 var userController=require('./../controllers/user-controller');
+var taskController=require('./../controllers/taskController');
 // passport script
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
@@ -328,5 +329,16 @@ router.post('/userregistration',
 	}
 	
 );
+
+// task api Routes
+router.get('/tasks',taskController.list_all_tasks);
+
+// router.post('/tasks',taskController.create_a_task);
+
+// router('/tasks/:taskId')
+// .get(taskController.read_a_task)
+// .put(taskController.update_a_task)
+// .delete(taskController.delete_a_task);
+
 
 module.exports=router;
