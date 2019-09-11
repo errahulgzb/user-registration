@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2019 at 08:01 AM
+-- Generation Time: Sep 11, 2019 at 12:31 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -19,6 +19,32 @@ SET time_zone = "+00:00";
 --
 -- Database: `employeedb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tasks`
+--
+
+CREATE TABLE `tasks` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `task` varchar(200) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`id`, `user_id`, `task`, `status`, `updated_at`, `created_at`) VALUES
+(1, 12, 'Find bugs', 1, '2019-09-11 09:23:44', '2016-04-10 23:50:40'),
+(2, 12, 'Review code', 1, '2019-09-11 09:23:44', '2016-04-10 23:50:40'),
+(3, 12, 'Fix bugs', 1, '2019-09-11 09:23:44', '2016-04-10 23:50:40'),
+(4, 11, 'Refactor Code', 1, '2019-09-11 09:23:44', '2016-04-10 23:50:40'),
+(5, 11, 'Push to prod', 1, '2019-09-11 09:23:44', '2016-04-10 23:50:50');
 
 -- --------------------------------------------------------
 
@@ -61,6 +87,12 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `profile_img`, `stat
 --
 
 --
+-- Indexes for table `tasks`
+--
+ALTER TABLE `tasks`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -70,6 +102,11 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for dumped tables
 --
 
+--
+-- AUTO_INCREMENT for table `tasks`
+--
+ALTER TABLE `tasks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `users`
 --
