@@ -49,8 +49,8 @@ app.use(pageRouter);
 
 // setting of server
 
-app.listen(3000,function(){
- console.log("Serving demo app on port 3000");
+app.listen(4000,function(){
+ console.log("Serving demo app on port 4000");
 });
 
 //module.exports=app;
