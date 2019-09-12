@@ -46,7 +46,7 @@ module.exports.updateprofile=function(req,res){
                 
                 // file removing from server uploading directory start from here
                   connection.query("SELECT id,email,profile_img FROM users WHERE email=?",[req.body.email],function(err, results, fields){
-                    if(results.length >0){
+                    if(results[0].profile_img !=""){
                         const targetPath = path.join('public', "./uploads/"+results[0].profile_img);
                         fs.unlink(targetPath, function (err) {
                         if (err) throw err;
