@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 var express=require("express");
 let jwt = require('jsonwebtoken');
 var config = require('./../config/config');
+const jwtExpirySeconds = 100
 // middleware
 //let middleware = require('./../../middleware'); 
 // database connection
@@ -29,7 +30,7 @@ module.exports.login=function(req,res){
             
             let token = jwt.sign({id: results[0].id},
                 config.secret,
-                { expiresIn: '1h' // expires in 24 hours
+                { expiresIn: jwtExpirySeconds // expires in 24 hours
                 }
               );
               // update token in user tables
